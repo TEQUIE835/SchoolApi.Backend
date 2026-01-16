@@ -95,8 +95,6 @@ Se testean reglas de negocio como:
 - Existe un Dockerfile y un docker-compose.yml para la ejecución del proyecto con base de datos MySQL en contenedores.
 - Se ha configurado un workflow de GitHub Actions para construir y subir imágenes Docker al GitHub Container Registry (GHCR).
 
-⚠️ Nota:  
-Actualmente, la integración con Docker y el pipeline de CI/CD se encuentran en proceso de validación y pruebas.
 
 ---
 
