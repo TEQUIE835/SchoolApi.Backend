@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build & Push Docker Image
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     permissions:
@@ -17,17 +17,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Log in to GitHub Container Registry
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}/courses-api:latest .
-
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository }}/courses-api:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/tequie835/schoolapi-backend:latest
