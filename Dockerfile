@@ -3,15 +3,16 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY *.sln .
-COPY src/Api/Api.csproj src/Api/
-COPY src/Application/Application.csproj src/Application/
-COPY src/Infrastructure/Infrastructure.csproj src/Infrastructure/
-COPY src/Domain/Domain.csproj src/Domain/
 
-RUN dotnet restore
+COPY SchoolApp/SchoolApp.csproj SchoolApp/
+COPY 1.Application/1.Application.csproj 1.Application/
+COPY 2.Domain/2.Domain.csproj 2.Domain/
+COPY 3.Infrastructure/3.Infrastructure.csproj 3.Infrastructure/
+
+RUN dotnet restore SchoolApp/SchoolApp.csproj
 
 COPY . .
-WORKDIR /src/src/Api
+WORKDIR /src/SchoolApp
 RUN dotnet publish -c Release -o /app/publish
 
 # Etapa 2: runtime
@@ -22,4 +23,4 @@ EXPOSE 8080
 
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "Api.dll"]
+ENTRYPOINT ["dotnet", "SchoolApp.dll"]

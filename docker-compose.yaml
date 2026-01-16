@@ -1,36 +1,26 @@
-version: "3.9"
-
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: courses_api
+    image: schoolapi
+    build: .
     ports:
       - "8080:8080"
     depends_on:
       - db
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Database=CoursesDb;User=sa;Password=Your_password123;TrustServerCertificate=True
-    networks:
-      - courses_network
+      ConnectionStrings__DefaultConnection: >
+        Server=db;
+        Database=school_db;
+        User=root;
+        Password=${MYSQL_ROOT_PASSWORD}
 
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: courses_db
+    image: mysql:8.0
+    restart: always
     environment:
-      SA_PASSWORD: "Your_password123"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: school_db
     volumes:
-      - sql_data:/var/opt/mssql
-    networks:
-      - courses_network
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  sql_data:
-
-networks:
-  courses_network:
+  mysql_data:
