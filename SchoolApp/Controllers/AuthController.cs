@@ -18,11 +18,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] string username, [FromBody] string email, [FromBody] string password)
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     {
         try
         {
-            var user = await _authService.RegisterAsync(new RegisterRequestDto(){Username = username, Email = email, Password = password});
+            var user = await _authService.RegisterAsync(request);
             if (user == null) return BadRequest();
             return Ok(user);
         }
@@ -33,11 +33,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] string userOrEmail, [FromBody] string password)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         try
         {
-            var response = await _authService.LoginAsync(new LoginRequestDto(){UserOrEmail = userOrEmail, Password = password});
+            var response = await _authService.LoginAsync(request);
             if (response == null) return BadRequest();
             return Ok(response);
         }
