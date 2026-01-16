@@ -58,7 +58,7 @@ public class AuthenticationService :IAuthService
 
     public async Task LogoutAsync(string refreshToken)
     {
-        var token = await _refreshTokenRepository.GetRefreshTokenAsync(refreshToken);
+        var token = await _refreshTokenRepository.GetRefreshTokenAsync(_hashService.HashPassword(refreshToken));
         if (token == null) throw new ArgumentException("Invalid refresh token");
         await _refreshTokenRepository.DeleteRefreshTokenAsync(token);
     }
